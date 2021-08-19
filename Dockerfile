@@ -1,4 +1,4 @@
-FROM quay.io/pires/docker-jre:8u171_alpine_3.8.1
+FROM ghcr.io/naimuri/docker-jre:master
 
 # Export HTTP & Transport
 EXPOSE 9200 9300
@@ -14,7 +14,7 @@ WORKDIR /tmp
 
 # Install Elasticsearch.
 RUN apk add --no-cache --update bash ca-certificates su-exec util-linux curl \
-  apk add --no-cache -t .build-deps gnupg openssl \
+  && apk add --no-cache -t .build-deps gnupg openssl \
   && echo "===> Install Elasticsearch..." \
   && curl -o elasticsearch.tar.gz -Lskj "$ES_TARBAL"; \
 	if [ "$ES_TARBALL_ASC" ]; then \
@@ -53,6 +53,7 @@ ENV HTTP_ENABLE true
 ENV NETWORK_HOST _site_
 ENV HTTP_CORS_ENABLE true
 ENV HTTP_CORS_ALLOW_ORIGIN *
+ENV HTTP_MAX_INITIAL_LINE_LENGTH 10k
 ENV NUMBER_OF_MASTERS 1
 ENV MAX_LOCAL_STORAGE_NODES 1
 ENV SHARD_ALLOCATION_AWARENESS ""
