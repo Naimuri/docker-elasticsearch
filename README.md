@@ -1,14 +1,6 @@
-# This project is no longer maintained
-
-As of November 7th, 2018, I've decided to end my commitment to maintaining this repo and related.
-
-It's been 3 years since I last used Elasticsearch, so I no longer have the motivation it takes to maintain and evolve this project. Also, other projects need all the attention I can give.
-
-It was a great run, **thank you all**.
-
 # docker-elasticsearch
 
-Ready to use, lean and highly configurable Elasticsearch container image.
+Ready to use, lean and highly configurable Elasticsearch container image - for ES 6.4.2.
 
 [![Docker Repository on Quay.io](https://quay.io/repository/pires/docker-elasticsearch/status "Docker Repository on Quay.io")](https://quay.io/repository/pires/docker-elasticsearch)
 
@@ -28,89 +20,98 @@ Ready to use, lean and highly configurable Elasticsearch container image.
 * [Multicast discovery is no longer built-in](https://www.elastic.co/guide/en/elasticsearch/reference/2.3/breaking_20_removed_features.html#_multicast_discovery_is_now_a_plugin)
 
 Ready to use node for cluster `elasticsearch-default`:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 Ready to use node for cluster `myclustername`:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
-	-e CLUSTER_NAME=myclustername \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
+  -e CLUSTER_NAME=myclustername \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 Ready to use node for cluster `elasticsearch-default`, with 8GB heap allocated to Elasticsearch:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
-	-e ES_JAVA_OPTS="-Xms8g -Xmx8g" \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
+  -e ES_JAVA_OPTS="-Xms8g -Xmx8g" \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 Ready to use node with plugins (x-pack and repository-gcs) pre installed. Already installed plugins are ignored:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
-	-e ES_JAVA_OPTS="-Xms8g -Xmx8g" \
-	-e ES_PLUGINS_INSTALL="repository-gcs,x-pack" \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
+  -e ES_JAVA_OPTS="-Xms8g -Xmx8g" \
+  -e ES_PLUGINS_INSTALL="repository-gcs,x-pack" \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 **Master-only** node for cluster `elasticsearch-default`:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
-	-e NODE_DATA=false \
-	-e HTTP_ENABLE=false \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
+  -e NODE_DATA=false \
+  -e HTTP_ENABLE=false \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 **Data-only** node for cluster `elasticsearch-default`:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach --volume /path/to/data_folder:/data \
-	--privileged \
-	-e NODE_MASTER=false \
-	-e HTTP_ENABLE=false \
+  --detach --volume /path/to/data_folder:/data \
+  --privileged \
+  -e NODE_MASTER=false \
+  -e HTTP_ENABLE=false \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 **Data-only** node for cluster `elasticsearch-default` with shard allocation awareness:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach --volume /path/to/data_folder:/data \
+  --detach --volume /path/to/data_folder:/data \
         --volume /etc/hostname:/dockerhost \
-	--privileged \
-	-e NODE_MASTER=false \
-	-e HTTP_ENABLE=false \
+  --privileged \
+  -e NODE_MASTER=false \
+  -e HTTP_ENABLE=false \
     -e SHARD_ALLOCATION_AWARENESS=dockerhostname \
     -e SHARD_ALLOCATION_AWARENESS_ATTR="/dockerhost" \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
 
 **Client-only** node for cluster `elasticsearch-default`:
-```
+
+```bash
 docker run --name elasticsearch \
-	--detach \
-	--privileged \
-	--volume /path/to/data_folder:/data \
-	-e NODE_MASTER=false \
-	-e NODE_DATA=false \
+  --detach \
+  --privileged \
+  --volume /path/to/data_folder:/data \
+  -e NODE_MASTER=false \
+  -e NODE_DATA=false \
         quay.io/pires/docker-elasticsearch:6.4.2
 ```
+
 I also make available special images and instructions for [AWS EC2](https://github.com/pires/docker-elasticsearch-aws) and [Kubernetes](https://github.com/pires/docker-elasticsearch-kubernetes).
 
 ### Environment variables
@@ -125,6 +126,7 @@ This image can be configured by means of environment variables, that one can set
 * [HTTP_ENABLE](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html#_settings_2)
 * [HTTP_CORS_ENABLE](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html#_settings_2)
 * [HTTP_CORS_ALLOW_ORIGIN](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html#_settings_2)
+* [HTTP_MAX_INITIAL_LINE_LENGTH](https://www.elastic.co/guide/en/elasticsearch/reference/6.4/modules-http.html)
 * [NUMBER_OF_MASTERS](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-zen.html#master-election)
 * [MAX_LOCAL_STORAGE_NODES](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#max-local-storage-nodes)
 * [ES_JAVA_OPTS](https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html)
@@ -136,12 +138,14 @@ This image can be configured by means of environment variables, that one can set
 * [PROCESSORS](https://github.com/elastic/elasticsearch-definitive-guide/pull/679/files) - allow elasticsearch to optimize for the actual number of available cpus (must be an integer - default = 1)
 
 ### Backup
+
 Mount a shared folder (for example via NFS) to `/backup` and make sure the `elasticsearch` user
 has write access. Then, set the `REPO_LOCATIONS` environment variable to `"/backup"` and create
 a backup repository:
 
 `backup_repository.json`:
-```
+
+```json
 {
   "type": "fs",
   "settings": {
@@ -156,6 +160,7 @@ curl -XPOST http://<container_ip>:9200/_snapshot/nas_repository -d @backup_repos
 ```
 
 Now, you can take snapshots using:
+
 ```bash
 curl -f -XPUT "http://<container_ip>:9200/_snapshot/nas_repository/snapshot_`date --utc +%Y_%m_%dt%H_%M`?wait_for_completion=true"
 ```
