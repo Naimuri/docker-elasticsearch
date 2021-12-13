@@ -44,7 +44,7 @@ COPY config /elasticsearch/config
 COPY run.sh /
 
 # Set environment variables defaults
-ENV ES_JAVA_OPTS "-Xms512m -Xmx512m"
+ENV ES_JAVA_OPTS "-Xms512m -Xmx512m -Dlog4j2.formatMsgNoLookups=true"
 ENV CLUSTER_NAME elasticsearch-default
 ENV NODE_MASTER true
 ENV NODE_DATA true
